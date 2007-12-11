@@ -1,6 +1,6 @@
 # adapted from technoweenies standard.
 # This auth system allows for recognition based on cookie, and a few other
-# niceties.  Is also response_for aware.
+# niceties. 
 #
 # If you've got more than one user model or a model named something otehr than user, then
 # set self.authenticated_system_model_class_name after inclusion.  (Default is 'User')
@@ -108,8 +108,7 @@ protected
   # to access the requested action.  For example, a popup window might
   # simply close itself.
   def access_denied
-    respond_to_method = respond_to?(:respond_to_without_response_for) ? :respond_to_without_response_for : :respond_to
-    send(respond_to_method) do |accepts|
+    respond_to do |accepts|
       accepts.html do
         store_location
         flash[:error] = access_denied_message
