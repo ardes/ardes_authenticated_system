@@ -1,6 +1,6 @@
 # to use these shared examples just set @model beforehand
 
-describe "AuthenticatedSystem::Base (re: current_password)", :shared => true do
+describe "Ardes::AuthenticatedSystem::Base (re: current_password)", :shared => true do
   it "when current_password correct, should update password" do
     @model.attributes = {:current_password => @model.password, :password => 'newone', :password_confirmation => 'newone'}
     @model.save.should be_true
@@ -25,7 +25,7 @@ describe "AuthenticatedSystem::Base (re: current_password)", :shared => true do
 end
 
 # this is included in (activated) below
-describe "AuthenticatedSystem::Base (re: password hashing)", :shared => true do
+describe "Ardes::AuthenticatedSystem::Base (re: password hashing)", :shared => true do
   it "should be able to reset password with current_password" do
     @model.update_attributes(:password => 'new password', :password_confirmation => 'new password', :current_password => @model.password)
     @model.class.authenticate(@model.email, 'new password').should == @model
@@ -38,7 +38,7 @@ describe "AuthenticatedSystem::Base (re: password hashing)", :shared => true do
 end
 
 # this is included in (activated) below
-describe "AuthenticatedSystem::Base (re: reset_password)", :shared => true do
+describe "Ardes::AuthenticatedSystem::Base (re: reset_password)", :shared => true do
   it "#request_reset_password should set remember_token for 1 hour" do
     @model.request_reset_password
     @model.remember_token.should_not be_nil
@@ -48,7 +48,7 @@ describe "AuthenticatedSystem::Base (re: reset_password)", :shared => true do
 end
 
 # this is included in (activated) below
-describe "AuthenticatedSystem::Base (re: request_activation)", :shared => true do
+describe "Ardes::AuthenticatedSystem::Base (re: request_activation)", :shared => true do
   it "#request_activation should set activated_at to nil" do
     @model.request_activation
     @model.activated_at.should be_nil
@@ -61,7 +61,7 @@ describe "AuthenticatedSystem::Base (re: request_activation)", :shared => true d
 end
 
 # this is included in (activated) below
-describe "AuthenticatedSystem::Base (re: remember_me)", :shared => true do
+describe "Ardes::AuthenticatedSystem::Base (re: remember_me)", :shared => true do
   it "#remember_me should set remember token" do
     @model.remember_me
     @model.remember_token.should_not be_nil
@@ -102,7 +102,7 @@ describe "AuthenticatedSystem::Base (re: remember_me)", :shared => true do
   end
 end
 
-describe 'AuthenticatedSystem::Base (validation)', :shared => true do
+describe 'Ardes::AuthenticatedSystem::Base (validation)', :shared => true do
   it "should require password" do
     @model.password= nil
     @model.should have_at_least(1).errors_on(:password)
@@ -133,7 +133,7 @@ describe 'AuthenticatedSystem::Base (validation)', :shared => true do
   end
 end
 
-describe "AuthenticatedSystem::Base (created)", :shared => true do
+describe "Ardes::AuthenticatedSystem::Base (created)", :shared => true do
   it "should not be activated" do
     @model.should_not be_activated
   end
@@ -152,7 +152,7 @@ describe "AuthenticatedSystem::Base (created)", :shared => true do
   end
 end
 
-describe "AuthenticatedSystem::Base (activated)", :shared => true do
+describe "Ardes::AuthenticatedSystem::Base (activated)", :shared => true do
   it "should be activated" do
     @model.should be_activated
   end
@@ -161,9 +161,9 @@ describe "AuthenticatedSystem::Base (activated)", :shared => true do
     @model.class.authenticate(@model.email, @model.password).should == @model
   end
   
-  it_should_behave_like "AuthenticatedSystem::Base (re: password hashing)"
-  it_should_behave_like "AuthenticatedSystem::Base (re: remember_me)"
-  it_should_behave_like "AuthenticatedSystem::Base (re: reset_password)"
-  it_should_behave_like "AuthenticatedSystem::Base (re: request_activation)"
-  it_should_behave_like "AuthenticatedSystem::Base (re: current_password)"
+  it_should_behave_like "Ardes::AuthenticatedSystem::Base (re: password hashing)"
+  it_should_behave_like "Ardes::AuthenticatedSystem::Base (re: remember_me)"
+  it_should_behave_like "Ardes::AuthenticatedSystem::Base (re: reset_password)"
+  it_should_behave_like "Ardes::AuthenticatedSystem::Base (re: request_activation)"
+  it_should_behave_like "Ardes::AuthenticatedSystem::Base (re: current_password)"
 end
