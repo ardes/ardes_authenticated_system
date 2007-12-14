@@ -16,7 +16,7 @@ module Ardes #:nodoc:
           validates_presence_of     :password_confirmation,      :if => :password_required?
           validates_length_of       :password, :within => 4..40, :if => :password_required?
           validates_confirmation_of :password,                   :if => :password_required?
-          validates_length_of       :email, :within => 3..100
+          validates_format_of :email, :allow_nil => true, :with => RFC822::EmailAddress
           validates_uniqueness_of   :email, :case_sensitive => false
         
           validate_on_update        :validate_current_password
