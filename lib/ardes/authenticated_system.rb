@@ -112,20 +112,23 @@ module Ardes#:nodoc:
     # simply close itself.
     def access_denied
       respond_to do |accepts|
-        accepts.html do
-          store_location
-          flash[:error] = access_denied_message
-          redirect_to access_denied_redirect
-        end
-        accepts.xml do
-          headers["Status"]           = "Unauthorized"
-          headers["WWW-Authenticate"] = %(Basic realm="Web Password")
-          render :text => "Could't authenticate you", :status => '401 Unauthorized'
-        end
+        accepts.html  { html_access_denied }
+        accepts.xml   { xml_access_denied }
       end
-      false
     end  
   
+    def html_access_denied
+      store_location
+      flash[:error] = access_denied_message
+      redirect_to access_denied_redirect
+    end
+    
+    def xml_access_denied
+      headers["Status"]           = "Unauthorized"
+      headers["WWW-Authenticate"] = %(Basic realm="Web Password")
+      render :text => "Could't authenticate you", :status => '401 Unauthorized'
+    end
+    
     # Store the URI of the current request in the session.
     #
     # We can return to this location by calling #redirect_to_stored_location.
