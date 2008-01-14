@@ -6,17 +6,14 @@ module Ardes#:nodoc:
   # Include this into your ApplicationController
   #
   # If you've got more than one user model or a model named something otehr than user, then
-  # set self.authenticated_system_model after inclusion.  (Default is User)
+  # set self.authenticated_system_model_class_name after inclusion.  (Default is User)
   module AuthenticatedSystem
     # Inclusion hook to make #current_user and #logged_in?, and similar methods
     # available as ActionView helper methods.
     def self.included(base)
       base.class_eval do
-        class_inheritable_writer :authenticated_system_model
-      
-        def authenticated_system_model
-          @authenticated_system_model ||= User
-        end
+        class_inheritable_accessor :authenticated_system_model_class_name
+        self.authenticated_system_model_class_name = 'User'
         
         helper_method :current_user, :logged_in?, :recognized_user, :recognized?
       protected
@@ -26,9 +23,9 @@ module Ardes#:nodoc:
 
   protected
     def authenticated_system_model
-      self.class.authenticated_system_model
+      @authenticated_system_model ||= authenticated_system_model_class_name.constantize
     end
-  
+    
     def access_denied_message
       @access_denied_message ||= "You need to login before viewing that page"
     end
