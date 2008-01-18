@@ -42,7 +42,6 @@ module Ardes#:nodoc:
         cookies.delete :auth_token
         if params[:unrecognize]
           cookies.delete :recognition_token 
-          self.logged_out_message = "You have been logged out (and forgotten)."
         end
         reset_session
         flash[:notice] = logged_out_message
