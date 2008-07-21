@@ -1,3 +1,5 @@
+require 'base64'
+
 module Ardes#:nodoc:
   # adapted from technoweenies standard.
   # This auth system allows for recognition based on cookie, and a few other
