@@ -6,6 +6,10 @@ module Ardes #:nodoc:
     module Base
       def self.included(base)
         base.class_eval do
+          # how long to remember
+          cattr_accessor :remember_me_expiry_time
+          self.remember_me_expiry_time = 2.weeks
+          
           # Virtual attribute for the unencrypted password, and current_password
           attr_accessor :password, :current_password
           attr_reader :original_email
@@ -100,7 +104,7 @@ module Ardes #:nodoc:
 
       # These create and unset the fields required for remembering users between browser closes
       def remember_me
-        remember_me_for 2.weeks
+        remember_me_for remember_me_expiry_time
       end
 
       def remember_me_for(time)
