@@ -92,10 +92,10 @@ describe "Ardes::AuthenticatedSystem::Base (re: remember_me)", :shared => true d
     @model.remember_token_expires_at.should == time
   end
 
-  it "#remember_me should remember me for two weeks by default" do
-    before = 2.week.from_now.utc
+  it "#remember_me should remember me for 'remember_me_expiry_time' by default" do
+    before = Time.now + @model.remember_me_expiry_time
     @model.remember_me
-    after = 2.week.from_now.utc
+    after = Time.now + @model.remember_me_expiry_time
     @model.remember_token.should_not be_nil
     @model.remember_token_expires_at.should_not be_nil
     @model.remember_token_expires_at.should be_between(before, after)
