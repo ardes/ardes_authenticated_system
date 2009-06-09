@@ -4,8 +4,6 @@ module Ardes#:nodoc:
     module Session
       def self.included(base)
         base.send :attr_writer, :logged_in_message, :logged_out_message, :bad_credentials_message
-        base.send :cattr_accessor, :recognition_expiry_time
-        base.recognition_expiry_time = 1.year
       end
     
       def new
@@ -25,7 +23,7 @@ module Ardes#:nodoc:
             current_user.remember_me
             cookies[:auth_token] = {:value => current_user.remember_token, :expires => current_user.remember_token_expires_at }
           end
-          cookies[:recognition_token] = {:value => current_user.recognition_token , :expires => Time.now + recognition_expiry_time}
+          cookies[:recognition_token] = {:value => current_user.recognition_token , :expires => Time.now + current_user.recognition_expiry_time}
           redirect_to_stored_location
           flash[:notice] = logged_in_message
       

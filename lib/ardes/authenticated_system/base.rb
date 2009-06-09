@@ -6,9 +6,10 @@ module Ardes #:nodoc:
     module Base
       def self.included(base)
         base.class_eval do
-          # how long to remember
-          cattr_accessor :remember_me_expiry_time
+          # how long to remember, recognise
+          cattr_accessor :remember_me_expiry_time, :recognition_expiry_time
           self.remember_me_expiry_time = 2.weeks
+          self.recognition_expiry_time = 1.year
           
           # Virtual attribute for the unencrypted password, and current_password
           attr_accessor :password, :current_password
