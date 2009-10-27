@@ -135,22 +135,35 @@ module Ardes#:nodoc:
     #
     # We can return to this location by calling #redirect_to_stored_location.
     def store_location
-      session[:return_to] = request.request_uri
+      self.return_to = request.request_uri
     end
   
+    def return_to
+      session[:return_to]
+    end
+    
+    def return_to=(uri)
+      session[:return_to] = (uri.nil? ? nil : extract_path_from_uri(uri))
+    end
+    
     def forget_location
-      session[:return_to] = nil
+      self.return_to = nil
     end
   
     # If there's no location then store the referring url, unless its the current url
     def store_location_as_back_by_default
-      session[:return_to] ||= request.env["HTTP_REFERER"]
+      self.return_to ||= request.env["HTTP_REFERER"]
+    end
+    
+    def extract_path_from_uri(uri)
+      uri = uri.gsub(%r(^\w+://[^/]+),'')
+      uri[0..0] == '/' ? uri : "/#{uri}"
     end
   
     # Redirect to the URI stored by the most recent store_location call or
     # to the passed default.
     def redirect_to_stored_location(default = '/')
-      session[:return_to] ? redirect_to(session[:return_to]) : redirect_to(default)
+      return_to ? redirect_to(return_to) : redirect_to(default)
       forget_location
     end
   
