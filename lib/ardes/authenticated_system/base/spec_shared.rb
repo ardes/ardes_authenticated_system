@@ -40,10 +40,11 @@ end
 # this is included in (activated) below
 describe "Ardes::AuthenticatedSystem::Base (re: reset_password)", :shared => true do
   it "#request_reset_password should set remember_token for 1 hour" do
-    @model.request_reset_password
-    @model.remember_token.should_not be_nil
-    @model.remember_token_expires_at.should > Time.now + 59.minutes
-    @model.remember_token_expires_at.should < Time.now + 60.minutes
+    at_time Time.now do
+      @model.request_reset_password
+      @model.remember_token.should_not be_nil
+      @model.remember_token_expires_at.should == Time.now + 60.minutes
+    end
   end
 end
 
@@ -93,12 +94,12 @@ describe "Ardes::AuthenticatedSystem::Base (re: remember_me)", :shared => true d
   end
 
   it "#remember_me should remember me for 'remember_me_expiry_time' by default" do
-    before = Time.now + @model.remember_me_expiry_time
-    @model.remember_me
-    after = Time.now + @model.remember_me_expiry_time
-    @model.remember_token.should_not be_nil
-    @model.remember_token_expires_at.should_not be_nil
-    @model.remember_token_expires_at.should be_between(before, after)
+    at_time Time.now do
+      @model.remember_me
+      @model.remember_token.should_not be_nil
+      @model.remember_token_expires_at.should_not be_nil
+      @model.remember_token_expires_at.should == (Time.now + @model.class.remember_me_expiry_time)
+    end
   end
 end
 
